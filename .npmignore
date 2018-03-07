@@ -1,0 +1,8 @@
+.editorconfig
+.gitignore
+.idea
+.npmignore
+.nyc_output
+.travis.yml
+test
+package-lock.json

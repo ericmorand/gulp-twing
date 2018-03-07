@@ -1,0 +1,25 @@
+{
+  "name": "gulp-twing",
+  "version": "0.1.0",
+  "description": "Twing plugin for gulp.js",
+  "keywords": [
+    "gulp",
+    "gulpplugin",
+    "twig",
+    "twing"
+  ],
+  "main": "src/index.js",
+  "scripts": {
+    "test": "tap test/*.js --cov --reporter=spec --100"
+  },
+  "author": "Eric MORAND <eric.morand@gmail.com>",
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "twing": "^0.8.1"
+  },
+  "devDependencies": {
+    "tap": "^11.1.1",
+    "twing": "^0.8.1",
+    "vinyl": "^2.1.0"
+  }
+}
