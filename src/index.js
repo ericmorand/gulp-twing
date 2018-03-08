@@ -1,7 +1,11 @@
 const Transform = require('stream').Transform;
 const Twing = require('twing');
 
-let gulpTwing = function(options) {
+let gulpTwing = function(env, data = {}) {
+    if (!(env instanceof Twing.TwingEnvironment)) {
+        throw new Error(`First parameter of gulp-twing must be an instance of TwingEnvironment, received ${typeof env}.`);
+    }
+
     let stream = new Transform({objectMode: true});
 
     stream._transform = function(file, encoding, callback) {
@@ -16,9 +20,7 @@ let gulpTwing = function(options) {
             template = file.path;
         }
 
-        let twing = new Twing.TwingEnvironment(options.loader, options.options || {});
-
-        twing.render(template, options.data).then(
+        env.render(template, data).then(
             function(binary) {
                 file.contents = Buffer.from(binary);
 

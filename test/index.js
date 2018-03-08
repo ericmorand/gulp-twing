@@ -9,15 +9,10 @@ tap.test('plugin', function(test) {
     test.test('should support valid vinyl', function(test) {
         let actual = '';
 
-        let stream = gulpTwing({
-            loader: new Twing.TwingLoaderFilesystem('/'),
-            options: {
-                cache: false
-            },
-            data: {
-                bar: 'BAR'
-            }
-        });
+        let loader = new Twing.TwingLoaderFilesystem('/');
+        let twing = new Twing.TwingEnvironment(loader);
+
+        let stream = gulpTwing(twing, {bar: 'BAR'});
 
         stream.on('data', function(data) {
             actual += data.contents.toString()
@@ -40,9 +35,10 @@ tap.test('plugin', function(test) {
     test.test('should support null vinyl', function(test) {
         let actual = '';
 
-        let stream = gulpTwing({
-            loader: new Twing.TwingLoaderFilesystem('/')
-        });
+        let loader = new Twing.TwingLoaderFilesystem('/');
+        let twing = new Twing.TwingEnvironment(loader);
+
+        let stream = gulpTwing(twing);
 
         stream.on('data', function(data) {
             if (!data.isNull()) {
@@ -59,10 +55,11 @@ tap.test('plugin', function(test) {
         stream.end(new Vinyl());
     });
 
-    test.test('should catch twing error', function(test) {
-        let stream = gulpTwing({
-            loader: new Twing.TwingLoaderFilesystem('/')
-        });
+    test.test('should catch Twing errors', function(test) {
+        let loader = new Twing.TwingLoaderFilesystem('/');
+        let twing = new Twing.TwingEnvironment(loader);
+
+        let stream = gulpTwing(twing);
 
         stream.on('error', function(err) {
             test.true(err instanceof Twing.TwingErrorSyntax);
@@ -83,6 +80,14 @@ tap.test('plugin', function(test) {
             path: path.join(__dirname, 'fixtures', 'error.html.twig'),
             contents: new Buffer('foo')
         }));
+    });
+
+    test.test('should throw an error when passed anything but a valid Twing environment', function(test) {
+        test.throws(function() {
+            gulpTwing('foo');
+        }, new Error('First parameter of gulp-twing must be an instance of TwingEnvironment, received string.'));
+
+        test.end();
     });
 
     test.end();

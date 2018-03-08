@@ -14,6 +14,40 @@ npm install twing gulp-twing --save-dev
 
 gulp-twing declares Twing as a peer dependency. It permits using any version of Twing (starting with version 0.4.0) with gulp-twing and profit from the latest features without having to wait for gulp-twing to catch-up.
 
+## Usage
+
+`let gulpTwing = require('gulp-twing');`
+
+### gulpTwing(env, data)
+
+Return an object transform stream that expects entry filenames.
+
+* env
+
+  A Twing environment. See [Twing documentation](https://ericmorand.github.io/twing/api.html) for details.
+
+* data
+ 
+  A hash of data passed to the render function of the template. See [Twing documentation](https://ericmorand.github.io/twing/api.html#rendering-templates) for details.
+
+### Example
+
+```javascript
+let gulpTwing = require('gulp-twing');
+
+let Twing = require('twing');
+let loader = new Twing.TwingLoaderFilesystem('src');
+let env = new Twing.TwingEnvironment(loader, {
+    debug: true
+});
+
+gulp
+    .src('src')
+    .pipe(gulpTwing(env, {foo: 'bar'}))
+    .dest('dest')
+;
+```
+
 ## Contributing
 
 * Fork the main repository
