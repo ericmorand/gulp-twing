@@ -1,5 +1,6 @@
 const Transform = require('stream').Transform;
 const Twing = require('twing');
+const path = require('path');
 
 let gulpTwing = function(env, data = {}) {
     if (!(env instanceof Twing.TwingEnvironment)) {
@@ -17,7 +18,7 @@ let gulpTwing = function(env, data = {}) {
             return;
         }
         else {
-            template = file.path;
+            template = path.basename(file.path);
         }
 
         env.render(template, data).then(
