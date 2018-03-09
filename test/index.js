@@ -9,7 +9,7 @@ tap.test('plugin', function(test) {
     test.test('should support valid vinyl', function(test) {
         let actual = '';
 
-        let loader = new Twing.TwingLoaderFilesystem('/');
+        let loader = new Twing.TwingLoaderFilesystem('./test/fixtures');
         let twing = new Twing.TwingEnvironment(loader);
 
         let stream = gulpTwing(twing, {bar: 'BAR'});
@@ -19,7 +19,7 @@ tap.test('plugin', function(test) {
         });
 
         stream.on('end', function() {
-            test.same(actual, 'foo BAR');
+            test.same(actual, 'foo BAR included');
 
             test.end();
         });
@@ -35,7 +35,7 @@ tap.test('plugin', function(test) {
     test.test('should support null vinyl', function(test) {
         let actual = '';
 
-        let loader = new Twing.TwingLoaderFilesystem('/');
+        let loader = new Twing.TwingLoaderFilesystem('./test/fixtures');
         let twing = new Twing.TwingEnvironment(loader);
 
         let stream = gulpTwing(twing);
@@ -56,7 +56,7 @@ tap.test('plugin', function(test) {
     });
 
     test.test('should catch Twing errors', function(test) {
-        let loader = new Twing.TwingLoaderFilesystem('/');
+        let loader = new Twing.TwingLoaderFilesystem('./test/fixtures');
         let twing = new Twing.TwingEnvironment(loader);
 
         let stream = gulpTwing(twing);
