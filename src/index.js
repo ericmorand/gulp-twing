@@ -1,10 +1,17 @@
 const Transform = require('stream').Transform;
 const Twing = require('twing');
+const replaceExt = require('replace-ext');
 
-let gulpTwing = function(env, data = {}) {
+let gulpTwing = function(env, data = {}, options = {}) {
     if (!(env instanceof Twing.TwingEnvironment)) {
         throw new Error(`First parameter of gulp-twing must be an instance of TwingEnvironment, received ${typeof env}.`);
     }
+
+    const defaults = {
+        outputExt: '.html'
+    };
+
+    options = Object.assign({}, defaults, options);
 
     let stream = new Transform({objectMode: true});
 
@@ -23,6 +30,7 @@ let gulpTwing = function(env, data = {}) {
         env.render(template, data).then(
             function(binary) {
                 file.contents = Buffer.from(binary);
+                file.path = replaceExt(file.path, options.outputExt);
 
                 callback(null, file);
             },
