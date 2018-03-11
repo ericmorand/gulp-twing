@@ -47,15 +47,13 @@ let gulp = require('gulp');
 let gulpTwing = require('gulp-twing');
 
 let Twing = require('twing');
-let loader = new Twing.TwingLoaderFilesystem('src');
-let env = new Twing.TwingEnvironment(loader, {
-    debug: true
-});
+let loader = new Twing.TwingLoaderFilesystem('/');
+let env = new Twing.TwingEnvironment(loader);
 
 gulp
-    .src('src')
+    .src('src/**/*.twig')
     .pipe(gulpTwing(env, {foo: 'bar'}))
-    .dest('dest')
+    .pipe(gulp.dest('dest'))
 ;
 ```
 
@@ -67,9 +65,7 @@ let gulpTwing = require('gulp-twing');
 
 let Twing = require('twing');
 let loader = new Twing.TwingLoaderFilesystem('/');
-let env = new Twing.TwingEnvironment(loader, {
-    debug: true
-});
+let env = new Twing.TwingEnvironment(loader);
 
 // src contains only *.css.twig and *.html.twig templates
 
@@ -94,9 +90,7 @@ let gulpRename = require('gulp-rename');
 
 let Twing = require('twing');
 let loader = new Twing.TwingLoaderFilesystem('/');
-let env = new Twing.TwingEnvironment(loader, {
-    debug: true
-});
+let env = new Twing.TwingEnvironment(loader);
 
 // src contains foo.twig, index.css.twig and index.html.twig
 
