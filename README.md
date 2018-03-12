@@ -4,6 +4,8 @@
 
 Compile [Twig](https://github.com/twigphp/Twig) templates with [gulp](https://github.com/gulpjs/gulp). Build upon [Twing](https://github.com/ericmorand/twing).
 
+Requires [Node.js](https://github.com/nodejs/node) ≥ 7.6.0
+
 ## Installation
 
 ```bash
