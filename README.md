@@ -2,23 +2,23 @@
 
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 
-Compile Twig templates with Gulp. Build upon [Twing](https://github.com/ericmorand/twing).
+Compile [Twig](https://github.com/twigphp/Twig) templates with [gulp](https://github.com/gulpjs/gulp). Build upon [Twing](https://github.com/ericmorand/twing).
 
 ## Installation
 
 ```bash
-npm install twing gulp-twing --save-dev
+npm install twing gulp-twing --save
 ```
 
 ## Why do I need to install Twing?
 
-gulp-twing declares Twing as a peer dependency. It permits using any version of Twing (starting with version 0.4.0) with gulp-twing and profit from the latest features without having to wait for gulp-twing to catch-up.
+gulp-twing declares Twing as a peer dependency. It permits using any version of Twing (starting with version 0.4.0) with gulp-twing and profits from the latest features without having to wait for gulp-twing to catch up.
 
 ## Usage
 
-`let gulpTwing = require('gulp-twing');`
+`var twing = require('gulp-twing');`
 
-### gulpTwing(env, data, options)
+### twing(env, data, options)
 
 Return an object transform stream that expects entry filenames.
 
@@ -27,7 +27,7 @@ Return an object transform stream that expects entry filenames.
   A Twing environment. See [Twing documentation](https://ericmorand.github.io/twing/api.html) for details.
 
 * data
- 
+
   A hash of data passed to the render function of the template. See [Twing documentation](https://ericmorand.github.io/twing/api.html#rendering-templates) for details.
 
 * options
@@ -35,7 +35,7 @@ Return an object transform stream that expects entry filenames.
   An optional hash of options. The following options are supported:
 
   * outputExt
-  
+
     The output file extension including the `.`. Defaults to `.html`.
 
 ### Examples
@@ -44,12 +44,12 @@ The following examples all require importing gulp, gulp-twing, and Twing, and se
 
 ```javascript
 // top of gulpfile.js
-let gulp = require('gulp');
-let gulpTwing = require('gulp-twing');
+var gulp = require('gulp');
+var twing = require('gulp-twing');
 
-let Twing = require('twing');
-let loader = new Twing.TwingLoaderFilesystem('/');
-let env = new Twing.TwingEnvironment(loader);
+var Twing = require('twing');
+var loader = new Twing.TwingLoaderFilesystem('/');
+var env = new Twing.TwingEnvironment(loader);
 ```
 
 #### Basic usage
@@ -58,9 +58,9 @@ To compile all `.twig` files in the source directory `src/` saving the output as
 
 ```javascript
 // in gulpfile.js
-function twing() {
+function twig() {
     return gulp.src('src/**/*.twig')
-        .pipe(gulpTwing(env))
+        .pipe(twing(env))
         .pipe(gulp.dest('dest'))
 }
 ```
@@ -70,8 +70,8 @@ function twing() {
 To expose the above function to the command line in gulp 3 or gulp 4, use `gulp.task`:
 
 ```javascript
-// in twing()
-gulp.task('twing', twing);
+// in twig()
+gulp.task('twig', twig);
 ```
 
 Call the function with the command `gulp twing`.
@@ -79,8 +79,8 @@ Call the function with the command `gulp twing`.
 If you don't need to support gulp 3, you can use the more terse gulp 4 syntax
 
 ```javascript
-// in twing()
-gulp.task(twing);
+// in twig()
+gulp.task(twig);
 ```
 
 #### Classic gulp syntax
@@ -89,9 +89,9 @@ It may be convenient to use the classic syntax, for example when migrating an ol
 
 ```javascript
 // in gulpfile.js
-gulp.task('twing', function() {
+gulp.task('twig', function() {
     return gulp.src('src/**/*.twig')
-        .pipe(gulpTwing(env))
+        .pipe(twing(env))
         .pipe(gulp.dest('dest'))
 });
 ```
@@ -118,9 +118,9 @@ use
 
 ```javascript
 // in gulpfile.js
-function twing() {
+function twig() {
     return gulp.src('src/**/*.twig')
-        .pipe(gulpTwing(env, {foo: 'bar'}))
+        .pipe(twing(env, {foo: 'bar'}))
         .pipe(gulp.dest('dest'))
 }
 ```
@@ -138,9 +138,9 @@ Use gulp-twing's `outputExt` option when applying the same file extension change
 
 // src contains only *.css.twig and *.html.twig templates
 
-function twing() {
+function twig() {
     return gulp.src('src/**/*.twig')
-        .pipe(gulpTwing(env, {}, {outputExt: ''}))
+        .pipe(twing(env, {}, {outputExt: ''}))
         .pipe(gulp.dest('dest'))
 }
 
@@ -155,14 +155,14 @@ To compile index.css.twig, index.html.twig, and foo.twig saving the output to in
 
 ```javascript
 // in gulpfile.js
-let gulpRename = require('gulp-rename');
+var rename = require('gulp-rename');
 
 // src contains foo.twig, index.css.twig and index.html.twig
 
-function twing() {
+function twig() {
     gulp.src('src/**/*.twig')
-        .pipe(gulpRename(function(path) {
-        .pipe(gulpTwing(env))
+        .pipe(twing(env))
+        .pipe(rename(function(path) {
             if (path.basename.indexOf('.') > -1) {
                 path.extname = '';
             }
@@ -177,14 +177,14 @@ By combining `gulp-rename` and `outputExt`, you can compile index.css.twig, inde
 
 ```javascript
 // in gulpfile.js
-let gulpRename = require('gulp-rename');
+var rename = require('gulp-rename');
 
 // src contains foo.twig, index.css.twig and index.html.twig
 
-function twing() {
+function twig() {
     gulp.src('src/**/*.twig')
-        .pipe(gulpRename(function(path) {
-        .pipe(gulpTwing(env, {}, {outputExt: '.ext'}))
+        .pipe(twing(env, {}, {outputExt: '.ext'}))
+        .pipe(rename(function(path) {
             if (path.basename.indexOf('.') > -1) {
                 path.extname = '';
             }
