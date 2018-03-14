@@ -9,7 +9,7 @@ tap.test('plugin', function (test) {
     test.test('should support valid vinyl', function (test) {
         let actual = '';
 
-        let loader = new Twing.TwingLoaderFilesystem('/');
+        let loader = new Twing.TwingLoaderFilesystem('.');
         let twing = new Twing.TwingEnvironment(loader);
 
         let stream = gulpTwing(twing, {bar: 'BAR'});
@@ -19,9 +19,13 @@ tap.test('plugin', function (test) {
         });
 
         stream.on('end', function () {
-            test.same(actual, 'foo BAR');
+            test.same(actual, 'foo BAR included');
 
             test.end();
+        });
+
+        stream.on('error', function(e) {
+            test.fail(e);
         });
 
         stream.end(new Vinyl({
@@ -35,7 +39,7 @@ tap.test('plugin', function (test) {
     test.test('should support null vinyl', function (test) {
         let actual = '';
 
-        let loader = new Twing.TwingLoaderFilesystem('/');
+        let loader = new Twing.TwingLoaderFilesystem('.');
         let twing = new Twing.TwingEnvironment(loader);
 
         let stream = gulpTwing(twing);
@@ -44,6 +48,12 @@ tap.test('plugin', function (test) {
             if (!data.isNull()) {
                 actual += data.contents.toString()
             }
+        });
+
+        stream.on('error', function(e) {
+            test.fail(e);
+
+            test.end();
         });
 
         stream.on('end', function () {
@@ -56,7 +66,7 @@ tap.test('plugin', function (test) {
     });
 
     test.test('should catch Twing errors', function (test) {
-        let loader = new Twing.TwingLoaderFilesystem('/');
+        let loader = new Twing.TwingLoaderFilesystem('.');
         let twing = new Twing.TwingEnvironment(loader);
 
         let stream = gulpTwing(twing);
@@ -93,13 +103,19 @@ tap.test('plugin', function (test) {
     test.test('outputExt option should defaults to ".html"', function (test) {
         let actual = '';
 
-        let loader = new Twing.TwingLoaderFilesystem('/');
+        let loader = new Twing.TwingLoaderFilesystem('.');
         let twing = new Twing.TwingEnvironment(loader);
 
         let stream = gulpTwing(twing, {bar: 'BAR'});
 
         stream.on('data', function (data) {
             actual = data.path;
+        });
+
+        stream.on('error', function(e) {
+            test.fail(e);
+
+            test.end();
         });
 
         stream.on('end', function () {
@@ -119,13 +135,19 @@ tap.test('plugin', function (test) {
     test.test('should rename the output based on the value of outputExt option', function (test) {
         let actual = '';
 
-        let loader = new Twing.TwingLoaderFilesystem('/');
+        let loader = new Twing.TwingLoaderFilesystem('.');
         let twing = new Twing.TwingEnvironment(loader);
 
         let stream = gulpTwing(twing, {bar: 'BAR'}, {outputExt: '.foo'});
 
         stream.on('data', function (data) {
             actual = data.path;
+        });
+
+        stream.on('error', function(e) {
+            test.fail(e);
+
+            test.end();
         });
 
         stream.on('end', function () {

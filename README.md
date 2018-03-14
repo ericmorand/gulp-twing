@@ -50,7 +50,7 @@ var gulp = require('gulp');
 var twing = require('gulp-twing');
 
 var Twing = require('twing');
-var loader = new Twing.TwingLoaderFilesystem('/');
+var loader = new Twing.TwingLoaderFilesystem('.');
 var env = new Twing.TwingEnvironment(loader);
 ```
 
