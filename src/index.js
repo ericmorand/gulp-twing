@@ -28,17 +28,17 @@ let gulpTwing = function(env, data = {}, options = {}) {
             template = path.relative(process.cwd(), file.path);
         }
 
-        env.render(template, data).then(
-            function(binary) {
-                file.contents = Buffer.from(binary);
-                file.path = replaceExt(file.path, options.outputExt);
+        try {
+            let binary = env.render(template, data);
 
-                callback(null, file);
-            },
-            function(err) {
-                callback(err, file);
-            }
-        );
+            file.contents = Buffer.from(binary);
+            file.path = replaceExt(file.path, options.outputExt);
+
+            callback(null, file);
+        }
+        catch(err) {
+            callback(err, file);
+        }
     };
 
     return stream;

@@ -2,6 +2,10 @@
   "name": "gulp-twing",
   "version": "1.1.0",
   "description": "Twing plugin for gulp.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ericmorand/gulp-twing"
+  },
   "keywords": [
     "gulp",
     "gulpplugin",
@@ -15,12 +19,12 @@
   "author": "Eric MORAND <eric.morand@gmail.com>",
   "license": "Apache-2.0",
   "peerDependencies": {
-    "twing": "^0.8.1"
+    "twing": "^0.10.0"
   },
   "devDependencies": {
     "replace-ext": "^1.0.0",
     "tap": "^11.1.1",
-    "twing": "^0.8.1",
+    "twing": "^0.10.0",
     "vinyl": "^2.1.0"
   }
 }

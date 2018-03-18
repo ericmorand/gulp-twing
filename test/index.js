@@ -73,7 +73,7 @@ tap.test('plugin', function (test) {
 
         stream.on('error', function (err) {
             test.true(err instanceof Twing.TwingErrorSyntax);
-            test.same(err.getMessage(), 'Unexpected "}"');
+            test.same(err.getMessage(), 'Unexpected "}".');
 
             test.end();
         });
