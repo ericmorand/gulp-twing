@@ -9,10 +9,7 @@ tap.test('plugin', function (test) {
     test.test('should support valid vinyl', function (test) {
         let actual = '';
 
-        let loader = new Twing.TwingLoaderFilesystem('.');
-        let twing = new Twing.TwingEnvironment(loader);
-
-        let stream = gulpTwing(twing, {bar: 'BAR'});
+        let stream = gulpTwing({bar: 'BAR'});
 
         stream.on('data', function (data) {
             actual += data.contents.toString()
@@ -39,10 +36,7 @@ tap.test('plugin', function (test) {
     test.test('should support null vinyl', function (test) {
         let actual = '';
 
-        let loader = new Twing.TwingLoaderFilesystem('.');
-        let twing = new Twing.TwingEnvironment(loader);
-
-        let stream = gulpTwing(twing);
+        let stream = gulpTwing();
 
         stream.on('data', function (data) {
             if (!data.isNull()) {
@@ -66,10 +60,8 @@ tap.test('plugin', function (test) {
     });
 
     test.test('should catch Twing errors', function (test) {
-        let loader = new Twing.TwingLoaderFilesystem('.');
-        let twing = new Twing.TwingEnvironment(loader);
 
-        let stream = gulpTwing(twing);
+        let stream = gulpTwing();
 
         stream.on('error', function (err) {
             test.true(err instanceof Twing.TwingErrorSyntax);
@@ -92,21 +84,10 @@ tap.test('plugin', function (test) {
         }));
     });
 
-    test.test('should throw an error when passed anything but a valid Twing environment', function (test) {
-        test.throws(function () {
-            gulpTwing('foo');
-        }, new Error('First parameter of gulp-twing must be an instance of TwingEnvironment, received string.'));
-
-        test.end();
-    });
-
     test.test('outputExt option should defaults to ".html"', function (test) {
         let actual = '';
 
-        let loader = new Twing.TwingLoaderFilesystem('.');
-        let twing = new Twing.TwingEnvironment(loader);
-
-        let stream = gulpTwing(twing, {bar: 'BAR'});
+        let stream = gulpTwing({bar: 'BAR'});
 
         stream.on('data', function (data) {
             actual = data.path;
@@ -135,10 +116,7 @@ tap.test('plugin', function (test) {
     test.test('should rename the output based on the value of outputExt option', function (test) {
         let actual = '';
 
-        let loader = new Twing.TwingLoaderFilesystem('.');
-        let twing = new Twing.TwingEnvironment(loader);
-
-        let stream = gulpTwing(twing, {bar: 'BAR'}, {outputExt: '.foo'});
+        let stream = gulpTwing({bar: 'BAR'}, {outputExt: '.foo'});
 
         stream.on('data', function (data) {
             actual = data.path;
