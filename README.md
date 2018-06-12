@@ -20,13 +20,9 @@ gulp-twing declares Twing as a peer dependency. It permits using any version of 
 
 `var twing = require('gulp-twing');`
 
-### twing(env, data, options)
+### twing(data, options)
 
 Return an object transform stream that expects entry filenames.
-
-* env
-
-  A Twing environment. See [Twing documentation](https://ericmorand.github.io/twing/api.html) for details.
 
 * data
 
@@ -40,18 +36,18 @@ Return an object transform stream that expects entry filenames.
 
     The output file extension including the `.`. Defaults to `.html`.
 
+  * templatePaths
+
+    A path string or an array of path strings to pass to [TwingLoaderFilesystem](https://ericmorand.github.io/twing/api.html#twingloaderfilesystem). Defaults to ` '.'`.
+
 ### Examples
 
-The following examples all require importing gulp, gulp-twing, and Twing, and setting the Twing loader and env:
+The following examples all require importing gulp and gulp-twing:
 
 ```javascript
 // top of gulpfile.js
 var gulp = require('gulp');
 var twing = require('gulp-twing');
-
-var Twing = require('twing');
-var loader = new Twing.TwingLoaderFilesystem('.');
-var env = new Twing.TwingEnvironment(loader);
 ```
 
 #### Basic usage
@@ -62,7 +58,7 @@ To compile all `.twig` files in the source directory `src/` saving the output as
 // in gulpfile.js
 function twig() {
     return gulp.src('src/**/*.twig')
-        .pipe(twing(env))
+        .pipe(twing())
         .pipe(gulp.dest('dest'))
 }
 ```
@@ -93,7 +89,7 @@ It may be convenient to use the classic syntax, for example when migrating an ol
 // in gulpfile.js
 gulp.task('twig', function() {
     return gulp.src('src/**/*.twig')
-        .pipe(twing(env))
+        .pipe(twing())
         .pipe(gulp.dest('dest'))
 });
 ```
@@ -122,7 +118,7 @@ use
 // in gulpfile.js
 function twig() {
     return gulp.src('src/**/*.twig')
-        .pipe(twing(env, {foo: 'bar'}))
+        .pipe(twing({foo: 'bar'}))
         .pipe(gulp.dest('dest'))
 }
 ```
@@ -142,7 +138,7 @@ Use gulp-twing's `outputExt` option when applying the same file extension change
 
 function twig() {
     return gulp.src('src/**/*.twig')
-        .pipe(twing(env, {}, {outputExt: ''}))
+        .pipe(twing({}, {outputExt: ''}))
         .pipe(gulp.dest('dest'))
 }
 
@@ -163,7 +159,7 @@ var rename = require('gulp-rename');
 
 function twig() {
     gulp.src('src/**/*.twig')
-        .pipe(twing(env))
+        .pipe(twing())
         .pipe(rename(function(path) {
             if (path.basename.indexOf('.') > -1) {
                 path.extname = '';
@@ -185,7 +181,7 @@ var rename = require('gulp-rename');
 
 function twig() {
     gulp.src('src/**/*.twig')
-        .pipe(twing(env, {}, {outputExt: '.ext'}))
+        .pipe(twing({}, {outputExt: '.ext'}))
         .pipe(rename(function(path) {
             if (path.basename.indexOf('.') > -1) {
                 path.extname = '';
