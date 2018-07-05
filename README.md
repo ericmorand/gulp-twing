@@ -48,8 +48,8 @@ The following examples all require importing gulp, gulp-twing, and Twing, and se
 // top of gulpfile.js
 var gulp = require('gulp');
 var twing = require('gulp-twing');
-
 var Twing = require('twing');
+
 var loader = new Twing.TwingLoaderFilesystem('.');
 var env = new Twing.TwingEnvironment(loader);
 ```
@@ -66,6 +66,69 @@ function twig() {
         .pipe(gulp.dest('dest'))
 }
 ```
+
+#### Resolving paths
+
+Because Twig does not support resolving relative paths, Twing also doesn't. There are three approaches you can take to handle files which refer to other files.
+
+(Note that the following examples use an underscore prefix to distinguish partials. This makes it possible to avoid compiling partials, with `gulp.src(['src/**/*.twig','!src/**/_*.twig')`. The prefix is not strictly necessary.)
+
+Given
+
+```
+(root)
+└── src
+    ├── _include-test.twig
+    └── index.twig
+```
+
+1. use the basic gulpfile setup, and write out the full path:
+
+    ```twig
+    {# src/index.twig #}
+    {% include 'src/_partial.twig' %}
+    ```
+
+1. or register and use a namespaced path. This is the solution officially supported by Twig. See [Twing loader documentation](https://ericmorand.github.io/twing/api.html#built-in-loaders) for details. Namespaced templates can be accessed via the special `@namespace_name/template_path` notation
+
+    ```javascript
+    // in gulpfile.js, after the basic gulp setup's `require`s
+
+    const loader = new Twing.TwingLoaderFilesystem('.');
+    loader.addPath('./src/', 'templates');// the second argument is the namespace's name
+    const env = new Twing.TwingEnvironment(loader);
+
+    gulp.task('twig', function() {
+        return gulp.src(['./src/**/*.twig','!./src/**/_*.twig'])
+            .pipe(twing(env))
+            .pipe(gulp.dest('./dest'))
+    });
+    ```
+
+    ```twig
+    {# path/to/templates/index.twig #}
+    {% include '@templates/_partial.twig' %}{# looks for './src/_partial.twig' #}
+    ```
+
+1. or add additional paths to the `TwingLoaderFilesystem`. See [Twing loader documentation](https://ericmorand.github.io/twing/api.html#built-in-loaders) for details.
+
+    ```javascript
+    // in gulpfile.js, after the basic gulp setup's `require`s
+
+    const loader = new Twing.TwingLoaderFilesystem(['.', './src/']);
+    const env = new Twing.TwingEnvironment(loader);
+
+    gulp.task('twig', function() {
+        return gulp.src(['./src/**/*.twig','!./src/**/_*.twig'])
+            .pipe(twing(env))
+            .pipe(gulp.dest('./dest'))
+    });
+    ```
+
+    ```twig
+    {# src/index.twig #}
+    {% include '_partial.twig' %}{# looks for './_partial.twig' and then './src/_partial.twig'}
+    ```
 
 #### CLI usage
 
