@@ -4,5 +4,6 @@
 .npmignore
 .nyc_output
 .travis.yml
+coverage
 test
 package-lock.json

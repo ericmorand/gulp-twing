@@ -1,10 +1,13 @@
-const Transform = require('stream').Transform;
-const Twing = require('twing');
+const {Transform} = require('stream');
 const replaceExt = require('replace-ext');
-const path = require('path');
 
-let gulpTwing = function(data = {}, options = {}) {
-
+/**
+ * @param {TwingEnvironment} env
+ * @param {*} data
+ * @param {*} options
+ * @returns {module:stream.internal.Transform}
+ */
+let gulpTwing = function (env, data = {}, options = {}) {
     const defaults = {
         outputExt: '.html',
         templatePaths: '.'
@@ -14,21 +17,16 @@ let gulpTwing = function(data = {}, options = {}) {
 
     let stream = new Transform({objectMode: true});
 
-    stream._transform = function(file, encoding, callback) {
+    stream._transform = function (file, encoding, callback) {
         let template;
 
         if (file.isNull()) {
             callback(null, file);
 
             return;
+        } else {
+            template = file.path;
         }
-        else {
-            template = path.relative(process.cwd(), file.path);
-        }
-
-        var env = new Twing.TwingEnvironment(
-            new Twing.TwingLoaderFilesystem(mergedOptions.templatePaths)
-        )
 
         try {
             let binary = env.render(template, data);
@@ -37,8 +35,7 @@ let gulpTwing = function(data = {}, options = {}) {
             file.path = replaceExt(file.path, mergedOptions.outputExt);
 
             callback(null, file);
-        }
-        catch(err) {
+        } catch (err) {
             callback(err, file);
         }
     };

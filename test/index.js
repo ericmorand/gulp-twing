@@ -1,6 +1,6 @@
 const tap = require('tap');
 const path = require('path');
-const Twing = require('twing');
+const {TwingEnvironment, TwingLoaderRelativeFilesystem, TwingErrorSyntax} = require('twing');
 const Vinyl = require('vinyl');
 
 const gulpTwing = require('../src');
@@ -8,8 +8,9 @@ const gulpTwing = require('../src');
 tap.test('plugin', function (test) {
     test.test('should support valid vinyl', function (test) {
         let actual = '';
+        let env = new TwingEnvironment(new TwingLoaderRelativeFilesystem());
 
-        let stream = gulpTwing({bar: 'BAR'});
+        let stream = gulpTwing(env, {bar: 'BAR'});
 
         stream.on('data', function (data) {
             actual += data.contents.toString()
@@ -21,7 +22,7 @@ tap.test('plugin', function (test) {
             test.end();
         });
 
-        stream.on('error', function(e) {
+        stream.on('error', function (e) {
             test.fail(e);
         });
 
@@ -29,14 +30,15 @@ tap.test('plugin', function (test) {
             cwd: __dirname,
             base: path.join(__dirname, 'fixtures'),
             path: path.join(__dirname, 'fixtures', 'index.html.twig'),
-            contents: new Buffer('foo')
+            contents: Buffer.from('foo')
         }));
     });
 
     test.test('should support null vinyl', function (test) {
         let actual = '';
 
-        let stream = gulpTwing();
+        let env = new TwingEnvironment(new TwingLoaderRelativeFilesystem());
+        let stream = gulpTwing(env);
 
         stream.on('data', function (data) {
             if (!data.isNull()) {
@@ -44,7 +46,7 @@ tap.test('plugin', function (test) {
             }
         });
 
-        stream.on('error', function(e) {
+        stream.on('error', function (e) {
             test.fail(e);
 
             test.end();
@@ -60,11 +62,11 @@ tap.test('plugin', function (test) {
     });
 
     test.test('should catch Twing errors', function (test) {
-
-        let stream = gulpTwing();
+        let env = new TwingEnvironment(new TwingLoaderRelativeFilesystem());
+        let stream = gulpTwing(env);
 
         stream.on('error', function (err) {
-            test.true(err instanceof Twing.TwingErrorSyntax);
+            test.true(err instanceof TwingErrorSyntax);
             test.same(err.getMessage(), 'Unexpected "}".');
 
             test.end();
@@ -80,20 +82,23 @@ tap.test('plugin', function (test) {
             cwd: __dirname,
             base: path.join(__dirname, 'fixtures'),
             path: path.join(__dirname, 'fixtures', 'error.html.twig'),
-            contents: new Buffer('foo')
+            contents: Buffer.from('foo')
         }));
     });
 
     test.test('outputExt option should defaults to ".html"', function (test) {
         let actual = '';
 
-        let stream = gulpTwing({bar: 'BAR'});
+        let env = new TwingEnvironment(new TwingLoaderRelativeFilesystem());
+        let stream = gulpTwing(env, {bar: 'BAR'});
 
         stream.on('data', function (data) {
             actual = data.path;
         });
 
-        stream.on('error', function(e) {
+        stream.on('error', function (e) {
+            console.warn(e)
+
             test.fail(e);
 
             test.end();
@@ -109,20 +114,21 @@ tap.test('plugin', function (test) {
             cwd: __dirname,
             base: path.join(__dirname, 'fixtures'),
             path: path.join(__dirname, 'fixtures', 'index.html.twig'),
-            contents: new Buffer('foo')
+            contents: Buffer.from('foo')
         }));
     });
 
     test.test('should rename the output based on the value of outputExt option', function (test) {
         let actual = '';
 
-        let stream = gulpTwing({bar: 'BAR'}, {outputExt: '.foo'});
+        let env = new TwingEnvironment(new TwingLoaderRelativeFilesystem());
+        let stream = gulpTwing(env, {bar: 'BAR'}, {outputExt: '.foo'});
 
         stream.on('data', function (data) {
             actual = data.path;
         });
 
-        stream.on('error', function(e) {
+        stream.on('error', function (e) {
             test.fail(e);
 
             test.end();
@@ -138,7 +144,7 @@ tap.test('plugin', function (test) {
             cwd: __dirname,
             base: path.join(__dirname, 'fixtures'),
             path: path.join(__dirname, 'fixtures', 'index.html.twig'),
-            contents: new Buffer('foo')
+            contents: Buffer.from('foo')
         }));
     });
 
