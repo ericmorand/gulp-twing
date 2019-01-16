@@ -14,17 +14,18 @@
   ],
   "main": "src/index.js",
   "scripts": {
-    "test": "tap test/*.js --cov --reporter=spec --100"
+    "precover": "rimraf coverage",
+    "test": "tape 'test/*.js' | tap-mocha-reporter spec",
+    "cover": "nyc npm t",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "author": "Eric MORAND <eric.morand@gmail.com>",
   "license": "Apache-2.0",
-  "peerDependencies": {
-    "twing": "^0.10.0"
-  },
   "devDependencies": {
     "replace-ext": "^1.0.0",
     "tap": "^11.1.1",
-    "twing": "^0.10.0",
+    "tape": "^4.9.2",
+    "twing": "^2.1.2",
     "vinyl": "^2.1.0"
   }
 }

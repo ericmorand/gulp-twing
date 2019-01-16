@@ -1,6 +1,6 @@
 # gulp-twing
 
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 
 Compile [Twig](https://github.com/twigphp/Twig) templates with [gulp](https://github.com/gulpjs/gulp). Build upon [Twing](https://github.com/ericmorand/twing).
 
@@ -12,17 +12,17 @@ Requires [Node.js](https://github.com/nodejs/node) ≥ 6.0.0
 npm install twing gulp-twing --save
 ```
 
-## Why do I need to install Twing?
-
-gulp-twing declares Twing as a peer dependency. It permits using any version of Twing (starting with version 0.4.0) with gulp-twing and profits from the latest features without having to wait for gulp-twing to catch up.
-
 ## Usage
 
 `var twing = require('gulp-twing');`
 
-### twing(data, options)
+### twing(env, data = {}, options = {})
 
 Return an object transform stream that expects entry filenames.
+
+* env
+
+  A [TwingEnvironment](https://ericmorand.github.io/twing/api.html#basics) instance.
 
 * data
 
@@ -42,12 +42,15 @@ Return an object transform stream that expects entry filenames.
 
 ### Examples
 
-The following examples all require importing gulp and gulp-twing:
+The following examples all require importing gulp, gulp-twing and instantiating a Twing environment:
 
 ```javascript
 // top of gulpfile.js
 var gulp = require('gulp');
 var twing = require('gulp-twing');
+var {TwingEnvironment, TwingLoaderRelativeFilesystem} = require('twing');
+
+let env = new TwingEnvironment(new TwingLoaderRelativeFilesystem());
 ```
 
 #### Basic usage
@@ -56,9 +59,9 @@ To compile all `.twig` files in the source directory `src/` saving the output as
 
 ```javascript
 // in gulpfile.js
-function twig() {
+function twig() {    
     return gulp.src('src/**/*.twig')
-        .pipe(twing())
+        .pipe(twing(env))
         .pipe(gulp.dest('dest'))
 }
 ```
@@ -89,7 +92,7 @@ It may be convenient to use the classic syntax, for example when migrating an ol
 // in gulpfile.js
 gulp.task('twig', function() {
     return gulp.src('src/**/*.twig')
-        .pipe(twing())
+        .pipe(twing(env))
         .pipe(gulp.dest('dest'))
 });
 ```
@@ -118,7 +121,7 @@ use
 // in gulpfile.js
 function twig() {
     return gulp.src('src/**/*.twig')
-        .pipe(twing({foo: 'bar'}))
+        .pipe(twing(env, {foo: 'bar'}))
         .pipe(gulp.dest('dest'))
 }
 ```
@@ -138,7 +141,7 @@ Use gulp-twing's `outputExt` option when applying the same file extension change
 
 function twig() {
     return gulp.src('src/**/*.twig')
-        .pipe(twing({}, {outputExt: ''}))
+        .pipe(twing(env, {}, {outputExt: ''}))
         .pipe(gulp.dest('dest'))
 }
 
@@ -159,7 +162,7 @@ var rename = require('gulp-rename');
 
 function twig() {
     gulp.src('src/**/*.twig')
-        .pipe(twing())
+        .pipe(twing(env))
         .pipe(rename(function(path) {
             if (path.basename.indexOf('.') > -1) {
                 path.extname = '';
@@ -181,7 +184,7 @@ var rename = require('gulp-rename');
 
 function twig() {
     gulp.src('src/**/*.twig')
-        .pipe(twing({}, {outputExt: '.ext'}))
+        .pipe(twing(env, {}, {outputExt: '.ext'}))
         .pipe(rename(function(path) {
             if (path.basename.indexOf('.') > -1) {
                 path.extname = '';
@@ -208,7 +211,5 @@ Apache-2.0 © [Eric MORAND]()
 [npm-url]: https://npmjs.org/package/gulp-twing
 [travis-image]: https://travis-ci.org/ericmorand/gulp-twing.svg?branch=master
 [travis-url]: https://travis-ci.org/ericmorand/gulp-twing
-[daviddm-image]: https://david-dm.org/ericmorand/gulp-twing.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/ericmorand/gulp-twing
 [coveralls-image]: https://coveralls.io/repos/github/ericmorand/gulp-twing/badge.svg
 [coveralls-url]: https://coveralls.io/github/ericmorand/gulp-twing
