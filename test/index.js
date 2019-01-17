@@ -1,6 +1,6 @@
 const tap = require('tap');
 const path = require('path');
-const {TwingEnvironment, TwingLoaderRelativeFilesystem, TwingErrorSyntax} = require('twing');
+const {TwingEnvironment, TwingLoaderRelativeFilesystem, TwingErrorSyntax, TwingLoaderFilesystem} = require('twing');
 const Vinyl = require('vinyl');
 
 const gulpTwing = require('../src');
@@ -9,6 +9,34 @@ tap.test('plugin', function (test) {
     test.test('should support valid vinyl', function (test) {
         let actual = '';
         let env = new TwingEnvironment(new TwingLoaderRelativeFilesystem());
+
+        let stream = gulpTwing(env, {bar: 'BAR'});
+
+        stream.on('data', function (data) {
+            actual += data.contents.toString()
+        });
+
+        stream.on('end', function () {
+            test.same(actual, 'foo BAR included');
+
+            test.end();
+        });
+
+        stream.on('error', function (e) {
+            test.fail(e);
+        });
+
+        stream.end(new Vinyl({
+            cwd: __dirname,
+            base: path.join(__dirname, 'fixtures'),
+            path: path.join(__dirname, 'fixtures', 'index.html.twig'),
+            contents: Buffer.from('foo')
+        }));
+    });
+
+    test.test('should filesystem loader', function (test) {
+        let actual = '';
+        let env = new TwingEnvironment(new TwingLoaderFilesystem('.'));
 
         let stream = gulpTwing(env, {bar: 'BAR'});
 

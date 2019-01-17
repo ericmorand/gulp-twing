@@ -1,5 +1,6 @@
 const {Transform} = require('stream');
 const replaceExt = require('replace-ext');
+const {relative} = require('path');
 
 /**
  * @param {TwingEnvironment} env
@@ -25,7 +26,7 @@ let gulpTwing = function (env, data = {}, options = {}) {
 
             return;
         } else {
-            template = file.path;
+            template = relative(process.cwd(), file.path);
         }
 
         try {
