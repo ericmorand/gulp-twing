@@ -1,6 +1,6 @@
 {
     "name": "gulp-twing",
-    "version": "3.0.1",
+    "version": "4.0.0",
     "description": "Twing plugin for gulp.js",
     "repository": {
         "type": "git",

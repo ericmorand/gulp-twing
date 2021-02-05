@@ -4,7 +4,10 @@
 
 Compile [Twig](https://github.com/twigphp/Twig) templates with [gulp](https://github.com/gulpjs/gulp). Build upon [Twing](https://github.com/ericmorand/twing).
 
-Requires [Node.js](https://github.com/nodejs/node) ≥ 6.0.0
+## Prerequisites
+
+* Requires [Node.js](https://github.com/nodejs/node) ≥ 8.0.0
+* Requires [Twing](https://www.npmjs.com/package/twing) ≥ 5.0.2
 
 ## Installation
 
