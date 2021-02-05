@@ -2,6 +2,7 @@
 .gitignore
 .idea
 .npmignore
+.npmrc
 .nyc_output
 .travis.yml
 coverage
